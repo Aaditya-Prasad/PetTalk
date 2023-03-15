@@ -4,7 +4,8 @@ import os
 import modal
 from fastapi import FastAPI, File, UploadFile
 
-stub = modal.Stub(image=modal.Image.debian_slim().pip_install("google-cloud-vision", "opencv-python-headless"))
+stub = modal.Stub("od", image=modal.Image.debian_slim().pip_install("google-cloud-vision", "opencv-python-headless", "python-multipart"))
+stub.sd = modal.Function.from_name("sd", "semantic_detection")
 
 
 @stub.webhook(method="POST", secret=modal.Secret.from_name("my-googlecloud-secret"),
@@ -72,7 +73,7 @@ def query(file: UploadFile = File(...)):
         Args:
         content: the image content.
         """
-        img = cv.imdecode(content)
+        img = cv.imdecode(content, cv.IMREAD_UNCHANGED)
         x, y, _ = img.shape
         objs = localize_objects(content)
         ver = objs[0].bounding_poly.normalized_vertices[:]
@@ -83,12 +84,15 @@ def query(file: UploadFile = File(...)):
     def compute(content):
         #just calls everything
         labels = detect_labels(content)
-        bbox, cut_img = cutout(content)
-        return labels, bbox, cut_img
+        # bbox, cut_img = cutout(content)
+        # return labels, bbox, cut_img
+        return labels, 0, 1
 
     content = file.file.read()
     a, b, c = compute(content)
     print("hello")
     print(a)
-    return {"labels": a}
+    pred = stub.app.sd.call(a)
+    print(pred)
+    return {"pred": pred}
 
