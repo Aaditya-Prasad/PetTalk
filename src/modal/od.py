@@ -83,13 +83,14 @@ def query(file: UploadFile = File(...)):
   
     def compute(content):
         #just calls everything
-        labels = detect_labels(content)
-        # bbox, cut_img = cutout(content)
+        
+        bbox, cut_img = cutout(content)
+        labels = detect_labels(cut_img)
         # return labels, bbox, cut_img
         return labels, 0, 1
 
     content = file.file.read()
-    a, b, c = compute(content)
+    a, _, _ = compute(content)
     print("hello")
     print(a)
     pred = stub.app.sd.call(a)

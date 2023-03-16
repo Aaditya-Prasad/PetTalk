@@ -78,39 +78,5 @@ def tt(item: Item):
     print(os.listdir("/root/cache"))
     return {"url": url}
 
-# @stub.webhook(shared_volumes={"/root/cache": volume}, method = "GET", secret=modal.Secret.from_name("my-firebase-secret"))
-# def get():
-#     import wave
-#     import firebase_admin
-#     from firebase_admin import credentials, storage
-#     import requests
-#     service_account_info = json.loads(os.environ["FIREBASE_KEY"])
-#     print(os.listdir())
-#     print(os.listdir("/root/cache"))
-#     cred = credentials.Certificate(service_account_info)
-#     print(f"{len(context)} hello!")
-#     if len(context) == 0:
-#         firebase_admin.initialize_app(cred, {
-#             'storageBucket': 'pettalk-376101.appspot.com'
-#         })
-    
 
-#     # Get a reference to the storage service
-#     bucket = storage.bucket()
-
-#     # Create a storage reference to the .wav file
-#     x = len(context)
-#     file_ref = bucket.blob(f'audio/result{x}.wav')
-#     print(os.listdir("/root/cache"))
-#     # Upload the file to Firebase Storage
-#     with open('/root/cache/result.wav', 'rb') as file:
-#         file_ref.upload_from_file(file)
-#     print(os.listdir("/root/cache"))
-#     # Get the download URL for the file
-#     file_ref.make_public()
-#     url = file_ref.public_url # URL expires in 5 minutes
-#     print('File URL:', url)
-#     os.remove("/root/cache/result.wav")
-#     print(os.listdir("/root/cache"))
-#     return {"url": url}
 
